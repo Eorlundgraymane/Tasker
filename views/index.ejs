@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasker</title>
+</head>
+
+<body>
+  <h1>Welcome to Tasker</h1>
+  <form action="/addTask" method="POST">
+    <input name="taskName" id="taskIDInput" type="text" required />
+    <button type="submit">Add Task</button>
+  </form>
+  <% if(tasks.length> 0) {%>
+    <h3>List of Tasks</h3>
+    <ol>
+      <% tasks.forEach(task=> { %>
+        <li>
+          <div style="display: inline-flex;">
+            <form action="/updateTask" method="post">
+              <input hidden type="text" name="taskID" <%=task.completed ? "checked" : "" %> value="<%= task.id %>" />
+                <input type="checkbox" name="completed" <%=task.completed ? "checked" : "" %>
+                onchange="this.form.submit()" />
+            </form>
+            <!-- + task.completed? "text-decoration:line-through;" : ""  -->
+            <input type="text" name="task" value="<%= task.task %>" readonly style='border: none; 
+              <%=task.completed? "text-decoration:line-through;" : "" %> ' />
+            <form action="/deleteTask" method="post">
+
+              <input hidden type="text" name="taskID" value="<%= task.id %>" readonly style="border: none" />
+              <button type="submit">Delete</button>
+            </form>
+            <form action="/moveTask" method="post">
+              <input hidden type="text" name="taskID" value="<%= task.id %>" readonly style="border: none" />
+              <input hidden type="text" name="taskDirection" value="0" readonly style="border: none" />
+              <button type="submit">Move Up</button>
+            </form>
+            <form action="/moveTask" method="post">
+              <input hidden type="text" name="taskID" value="<%= task.id %>" readonly style="border: none" />
+              <input hidden type="text" name="taskDirection" value="1" readonly style="border: none" />
+              <button type="submit">Move Down</button>
+            </form>
+        </li>
+        <% }) %>
+          </div>
+
+    </ol>
+    <% } %>
+      <script>
+        window.onload = function () {
+          document.getElementById("taskIDInput").focus();
+        };
+      </script>
+</body>
+
+</html>
