@@ -32,6 +32,7 @@ const readTaskFile = (type = fileType.tasks) => {
 
 const writeTaskFile = (taskJSON, type = fileType.tasks) => {
     let filePath = null;
+    console.log(type);
     switch (type) {
         case fileType.tasks:
             filePath = tasksPath;
@@ -71,13 +72,20 @@ export default {
     loadTasker: async (req, res) => {
         //fixTasks();
         let tasks = [];
+        let history = [];
         try {
             tasks = readTaskFile();
         }
         catch {
             writeTaskFile(tasks);
         }
-        res.render("index.ejs", { tasks: tasks });
+        try {
+            history = readTaskFile(fileType.history);
+        }
+        catch {
+            writeTaskFile(history, fileType.history);
+        }
+        res.render("index.ejs", { tasks: tasks, history: history });
     },
     addTask: (req, res) => {
         let newTask = new Task();
@@ -141,4 +149,16 @@ export default {
         writeTaskFile(tasks);
         res.redirect("/")
     },
+    archiveTask: (req, res) => {
+        let taskIDToArchive = req.body.taskID;
+        let tasks = readTaskFile();
+        let taskToArchive = tasks.find(task => task.id == taskIDToArchive);
+        let taskIndexToSplice = tasks.findIndex(task => task.id == taskIDToArchive);
+        let history = readTaskFile(fileType.history);
+        history.push(taskToArchive);
+        writeTaskFile(history, fileType.history);
+        tasks.splice(taskIndexToSplice, 1);
+        writeTaskFile(tasks);
+        res.redirect("/");
+    }
 }

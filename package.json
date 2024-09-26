@@ -18,5 +18,11 @@
   },
   "emmet.includeLanguages": {
     "ejs": "html"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "*.json",
+      "public/javascripts/*.js"
+    ]
   }
 }
