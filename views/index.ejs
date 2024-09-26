@@ -54,8 +54,8 @@
         <% history.forEach(task=> { %>
           <li>
             <div style="display: inline-flex;">              
-                <input hidden type="text" name="taskID" <%=task.completed ? "checked" : "" %> value="<%= task.id %>"<%=task.completed?'class = strikedOut' : '' %>  />                                             
-              <input type="text" name="task" value="<%= task.task %>" readonly style='border: none;' />                            
+                <input hidden type="text" name="taskID" <%=task.completed ? "checked" : "" %> value="<%= task.id %>" />                                             
+              <input type="text" name="task" value="<%= task.task %>" readonly style='border: none;' <%=task.completed?'class = strikedOut' : '' %>  />                            
           </li>
           <% }) %>
             </div>
